@@ -1,0 +1,166 @@
+version: '2'
+services:
+  deluge:
+    image: linuxserver/deluge:latest
+    container_name: deluge
+    restart: unless-stopped
+    network_mode: "host"
+    ports:
+      - 8112:8112
+    environment:
+      - PUID=0
+      - PGID=0
+      - TZ=Europe/Paris
+    volumes:
+      - /home/media/deluge/config:/config
+      - /home/media/data:/data
+      - /srv/dev-disk-by-uuid-82E0348CE0348885/media:/data_externe #externe random
+      - /srv/dev-disk-by-uuid-aeae4fcc-4ea5-4125-ba2f-0b3e0b9d4d22/media:/data_hitachi #externe hitachi
+      - /srv/dev-disk-by-uuid-e548dd83-cc2b-489f-96ec-d3c0e91197c3/media:/data_wd #western digital
+
+  sonarr:
+    image: linuxserver/sonarr:latest
+    container_name: sonarr
+    restart: unless-stopped
+    network_mode: "host"
+    ports:
+      - 8989:8989
+    environment:
+      - PUID=0
+      - PGID=0
+      - TZ=Europe/Paris
+    volumes:
+      - /home/media/sonarr/config:/config
+      - /home/media/data:/data
+      - /srv/dev-disk-by-uuid-82E0348CE0348885/media:/data_externe #externe random
+      - /srv/dev-disk-by-uuid-aeae4fcc-4ea5-4125-ba2f-0b3e0b9d4d22/media:/data_hitachi #externe hitachi
+      - /srv/dev-disk-by-uuid-e548dd83-cc2b-489f-96ec-d3c0e91197c3/media:/data_wd #western digital
+
+  radarr:
+    image: linuxserver/radarr:latest
+    container_name: radarr
+    restart: unless-stopped
+    network_mode: "host"
+    ports:
+      - 7878:7878
+    environment:
+      - PUID=0
+      - PGID=0
+      - TZ=Europe/Paris
+    volumes:
+      - /home/media/radarr/config:/config
+      - /home/media/data:/data
+      - /srv/dev-disk-by-uuid-82E0348CE0348885/media:/data_externe #externe random
+      - /srv/dev-disk-by-uuid-aeae4fcc-4ea5-4125-ba2f-0b3e0b9d4d22/media:/data_hitachi #externe hitachi
+      - /srv/dev-disk-by-uuid-e548dd83-cc2b-489f-96ec-d3c0e91197c3/media:/data_wd #western digital
+
+
+  plex:
+    image: linuxserver/plex:latest
+    container_name: plex
+    restart: unless-stopped
+    network_mode: "host"
+    ports:
+      - 32400:32400
+    environment:
+      - VERSION=latest
+      - PUID=0
+      - PGID=0
+      - TZ=Europe/Paris
+    volumes:
+      - /home/media/plex/config:/config
+      - /home/media/data:/data 
+      - /srv/dev-disk-by-uuid-82E0348CE0348885/media:/data_externe #externe expansion
+      - /srv/dev-disk-by-uuid-aeae4fcc-4ea5-4125-ba2f-0b3e0b9d4d22/media:/data_hitachi #externe hitachi
+      - /srv/dev-disk-by-uuid-e548dd83-cc2b-489f-96ec-d3c0e91197c3/media:/data_wd #western digital
+
+
+  jellyfin:
+    image: linuxserver/jellyfin:latest
+    container_name: jellyfin
+    restart: unless-stopped
+    network_mode: "host"
+    ports:
+      - 8096:8096
+    environment:
+      - PUID=0
+      - PGID=0
+      - TZ=Europe/Paris
+    volumes:
+      - /home/media/jellyfin/config:/config
+      - /home/media/data/:/data
+      - /srv/dev-disk-by-uuid-82E0348CE0348885/media:/data_externe #externe random
+      - /srv/dev-disk-by-uuid-aeae4fcc-4ea5-4125-ba2f-0b3e0b9d4d22/media:/data_hitachi #externe hitachi
+      - /srv/dev-disk-by-uuid-e548dd83-cc2b-489f-96ec-d3c0e91197c3/media:/data_wd #western digital
+
+  
+  jackett:
+    image: linuxserver/jackett:latest
+    container_name: jackett
+    restart: unless-stopped
+    network_mode: "host"
+    ports:
+      - 9117:9117
+    environment:
+      - PUID=0
+      - PGID=0
+      - TZ=Europe/Paris
+    volumes:
+      - /home/media/jackett/config:/config
+      - /etc/localtime:/etc/localtime:ro
+      
+  prowlarr:
+    image: ghcr.io/linuxserver/prowlarr:develop
+    container_name: prowlarr
+    network_mode: "host"
+    environment:
+      - PUID=0
+      - PGID=0
+      - TZ=Europe/Paris
+    volumes:
+      - /home/media/prowlarr/config:/config
+    ports:
+      - 9696:9696
+    restart: unless-stopped
+      
+  bazarr:
+    image: ghcr.io/linuxserver/bazarr
+    container_name: bazarr
+    environment:
+      - PUID=0
+      - PGID=0
+      - TZ=Europe/Paris
+    volumes:
+      - /home/media/bazarr/config:/config
+      - /home/media/data/movies:/movies #optional
+      - /home/media/data/tv:/tv #optional
+    network_mode: "host"
+    ports:
+      - 6767:6767
+    restart: unless-stopped
+
+  overseerr:
+    image: sctx/overseerr:latest
+    container_name: overseerr
+    environment: 
+      - PUID=0
+      - PGID=0
+      - TZ=Europe/Paris
+    ports:
+      - 5055:5055
+    volumes:
+      - /home/media/overseerr/config:/app/config
+    restart: unless-stopped
+
+
+  flaresolverr:
+    # DockerHub mirror flaresolverr/flaresolverr:latest
+    image: ghcr.io/flaresolverr/flaresolverr:latest
+    container_name: flaresolverr
+    environment:
+      - PUID=0
+      - PGID=0
+      - TZ=Europe/Paris
+    ports:
+      - 8191:8191
+    restart: unless-stopped 
